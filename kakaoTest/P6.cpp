@@ -3,12 +3,12 @@
 
 using namespace std;
 
-int recv(int n, int nextdist, int walkercnt, int valcnt, vector<int> val, int* distarr, vector<int> dist) {
+int recv(int n, int nextdist, int walkercnt, int valcnt, vector<int> val, int* distarr, vector<int> dist, int f) {
 	
-	if (valcnt > val.size())//끝
+	if ( valcnt > val.size()-f)//끝
 		return walkercnt;
 
-	if (valcnt == val.size())//끝
+	if (valcnt == val.size()-f)//끝
 		return walkercnt+1;
 
 	//nextdist == -1, 스킵. 이전 단계가 skip 이 아니었을 때만 호출.
@@ -18,7 +18,7 @@ int recv(int n, int nextdist, int walkercnt, int valcnt, vector<int> val, int* d
 	while (1) {
 
 		if (valcnt >= val.size())
-			return walkercnt+1;
+			return walkercnt;
 
 		if (val[valcnt] <= nextdist) {
 			nextdist -= val[valcnt];
@@ -36,7 +36,8 @@ int recv(int n, int nextdist, int walkercnt, int valcnt, vector<int> val, int* d
 	//	if (valcnt >= val.size())
 	//		valcnt--;
 	//}
-	valcnt++;
+	//if(flag != -1)
+		valcnt++;
 
 	int newdistarr[10];
 	for (int i = 0; i < dist.size(); i++) {
@@ -49,7 +50,7 @@ int recv(int n, int nextdist, int walkercnt, int valcnt, vector<int> val, int* d
 	for (int i = 0; i < dist.size(); i++) {
 		if (newdistarr[i] == 1) {//아직 일 안한 친구
 			newdistarr[i] = 0;
-			w = recv(n,dist[i], walkercnt+ plusw,valcnt,val, newdistarr,dist);
+			w = recv(n,dist[i], walkercnt+ plusw,valcnt,val, newdistarr,dist, f);
 			if (w < minw) {
 				minw = w;
 			}
@@ -57,7 +58,7 @@ int recv(int n, int nextdist, int walkercnt, int valcnt, vector<int> val, int* d
 		}
 	}
 	if (flag != -1) {
-		w = recv(n, -1, walkercnt + plusw, valcnt, val, newdistarr, dist);
+		w = recv(n, -1, walkercnt + plusw, valcnt, val, newdistarr, dist, f);
 		if (w < minw) {
 			minw = w;
 		}
@@ -66,7 +67,7 @@ int recv(int n, int nextdist, int walkercnt, int valcnt, vector<int> val, int* d
 	return minw;
 }
 
-int calc(int n, vector<int> val, vector<int> dist) {
+int calc(int n, vector<int> val, vector<int> dist, int max) {
 
 	int newdistarr[10];
 	for (int i = 0; i < dist.size(); i++) {
@@ -77,14 +78,15 @@ int calc(int n, vector<int> val, vector<int> dist) {
 	int w;
 	for (int i = 0; i < dist.size(); i++) {
 		newdistarr[i] = 0;
-		w = recv(n, dist[i], 0, 0, val, newdistarr, dist);
+		w = recv(n, dist[i], 0, 0, val, newdistarr, dist,1);
 		if (w < minw) {
 			minw = w;
 		}
 		newdistarr[i] = 1;
 
 	}
-	w = recv(n, -1, 0, 0, val, newdistarr, dist);
+	//val.push_back(max);
+	w = recv(n, -1, 0, 0, val, newdistarr, dist,0);
 	if (w < minw) {
 		minw = w;
 	}
@@ -122,7 +124,7 @@ int solution(int n, vector<int> weak, vector<int> dist) {
 	for (int i = 0; i < maxi; i++) {
 		inteval_sort[id++] = interval[i];
 	}
-	//inteval_sort.push_back(max);
+	inteval_sort.push_back(max);
 	
 	//최대, 최소 계산
 	int total = n - max;
@@ -134,7 +136,7 @@ int solution(int n, vector<int> weak, vector<int> dist) {
 
 	
 
-	answer = calc(n,inteval_sort,dist);
+	answer = calc(n,inteval_sort,dist,max);
 
 	if (answer > dist.size()) {
 	
