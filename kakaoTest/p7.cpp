@@ -52,76 +52,88 @@ int calc(vector<vector<int>> board, int n) {
 			//위로 90도 좌우
 			//아래로 90도 좌우
 			int newmode = 1 - mode;
-			//위로 90도, 좌 축
-			newx = x; newy = y - 1;
-			if (0 <= y - 1 && y - 1 < n && valid[y - 1][x][mode] == 1) 
+			if (0 <= y - 1 && y - 1 < n && valid[y - 1][x][mode] == 1) {
+				//위로 90도, 좌 축
+				newx = x; newy = y - 1;
 				if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
 					statss newstat;
 					newstat.mode = newmode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 					que.push(newstat);
 				}
-			//위로 90도, 우 축
-			newx = x + 1; newy = y - 1;
-			if (0 <= y - 1 && y - 1 < n && valid[y - 1][x][mode] == 1)
+
+				//위로 90도, 우 축
+				newx = x + 1; newy = y - 1;
 				if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
 					statss newstat;
 					newstat.mode = newmode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 					que.push(newstat);
 				}
-			//아래로 90도, 좌 축
-			newx = x; newy = y;
-			if (0 <= y + 1 && y + 1 < n && valid[y + 1][x][mode] == 1)
+
+			}
+
+			if (0 <= y + 1 && y + 1 < n && valid[y + 1][x][mode] == 1) {
+				//아래로 90도, 좌 축
+				newx = x; newy = y;
 				if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
 					statss newstat;
 					newstat.mode = newmode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 					que.push(newstat);
 				}
-			//아래로 90도, 우 축
-			newx = x + 1; newy = y;
-			if (0 <= y + 1 && y + 1 < n && valid[y + 1][x][mode] == 1)
+
+				//아래로 90도, 우 축
+				newx = x + 1; newy = y;
 				if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
 					statss newstat;
 					newstat.mode = newmode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 					que.push(newstat);
 				}
+			}
+
+
 		}
 
 		else if (mode == 1) {//세로
 
 			int newmode = 1 - mode;
 
-			//좌로 90도, 상 축
-			newx = x - 1; newy = y;
-			if (0 <= x - 1 && x - 1 < n && valid[y][x - 1][mode] == 1)
+			if (0 <= x - 1 && x - 1 < n && valid[y][x - 1][mode] == 1) {
+
+				//좌로 90도, 상 축
+				newx = x - 1; newy = y;
 				if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
 					statss newstat;
 					newstat.mode = newmode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 					que.push(newstat);
 				}
-			//우로 90도, 상 축
-			newx = x; newy = y;
-			if (0 <= x + 1 && x + 1 < n && valid[y][x + 1][mode] == 1)
+
+
+				//좌로 90도, 하 축
+				newx = x - 1; newy = y + 1;
 				if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
 					statss newstat;
 					newstat.mode = newmode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 					que.push(newstat);
 				}
-			//좌로 90도, 하 축
-			newx = x - 1; newy = y + 1;
-			if (0 <= x - 1 && x - 1 < n && valid[y][x - 1][mode] == 1)
+			}
+
+
+			if (0 <= x + 1 && x + 1 < n && valid[y][x + 1][mode] == 1) {
+
+				//우로 90도, 상 축
+				newx = x; newy = y;
 				if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
 					statss newstat;
 					newstat.mode = newmode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 					que.push(newstat);
 				}
-			//우로 90도, 하 축
-			newx = x; newy = y + 1;
-			if (0 <= x + 1 && x + 1 < n && valid[y][x + 1][mode] == 1)
+				//우로 90도, 하 축
+				newx = x; newy = y + 1;
 				if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
 					statss newstat;
 					newstat.mode = newmode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 					que.push(newstat);
 				}
+			}
 		}
 
 
@@ -204,14 +216,14 @@ int solution(vector<vector<int>> board) {
 
 int main() {
 	vector<vector<int>> board;
-	
+
 	//int in[] = {0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0};
 	//int n=5;
 
 	//int in[] = { 0, 0, 0, 0, 0, 0, 1 , 1, 1, 1, 1, 0, 0, 1 , 0, 0, 0, 0, 0, 0, 0 , 0, 0, 1, 1, 1, 1, 0 , 0, 1, 1, 1, 1, 1, 0 , 0, 0, 0, 0, 0, 1, 1 , 0, 0, 1, 0, 0, 0, 0 };
 	//int in[] = { 0, 0, 0, 0, 0, 0, 1 , 1, 1, 1, 1, 0, 0, 1 , 0, 0, 0, 0, 0, 0, 0 , 0, 0, 1, 1, 1, 0, 0 , 0, 1, 1, 1, 1, 1, 0 , 0, 0, 0, 0, 0, 1, 0 , 0, 0, 1, 0, 0, 0, 0 };
 
-	int in[] = {   0, 0, 0, 0, 0, 0, 0, 0, 0 , 1, 1, 1, 1, 1, 1, 1, 0, 0 , 1, 1, 1, 1, 1, 1, 1, 1, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0 , 0, 0, 1, 1, 1, 1, 1, 0, 0 , 0, 1, 1, 1, 1, 1, 1, 1, 1 , 0, 0, 1, 1, 1, 1, 1, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0 , 1, 1, 1, 1, 1, 1, 1, 1, 0   };
+	int in[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 , 1, 1, 1, 1, 1, 1, 1, 0, 0 , 1, 1, 1, 1, 1, 1, 1, 1, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0 , 0, 0, 1, 1, 1, 1, 1, 0, 0 , 0, 1, 1, 1, 1, 1, 1, 1, 1 , 0, 0, 1, 1, 1, 1, 1, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0 , 1, 1, 1, 1, 1, 1, 1, 1, 0 };
 	int n = 9;
 	for (int i = 0; i < n; i++) {
 
