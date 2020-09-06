@@ -141,9 +141,7 @@ int calc(vector<vector<int>> board, int n) {
 
 		//À§
 		newx = x; newy = y - 1;
-		//if(0<= newx && x < n && 0<= newy && newy < n && )
-
-		if (checkpos(newx, newy, mode, n, board)) {
+		if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][mode] == 0 && valid[newy][newx][mode] == 1) {
 			statss newstat;
 			newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 			que.push(newstat);
@@ -151,7 +149,7 @@ int calc(vector<vector<int>> board, int n) {
 
 		//¾Æ·¡
 		newx = x; newy = y + 1;
-		if (checkpos(newx, newy, mode, n, board)) {
+		if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][mode] == 0 && valid[newy][newx][mode] == 1) {
 			statss newstat;
 			newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 			que.push(newstat);
@@ -159,7 +157,7 @@ int calc(vector<vector<int>> board, int n) {
 
 		//ÁÂ
 		newx = x - 1; newy = y;
-		if (checkpos(newx, newy, mode, n, board)) {
+		if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][mode] == 0 && valid[newy][newx][mode] == 1) {
 			statss newstat;
 			newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 			que.push(newstat);
@@ -167,7 +165,7 @@ int calc(vector<vector<int>> board, int n) {
 
 		//¿ì
 		newx = x + 1; newy = y;
-		if (checkpos(newx, newy, mode, n, board)) {
+		if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][mode] == 0 && valid[newy][newx][mode] == 1) {
 			statss newstat;
 			newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 			que.push(newstat);
