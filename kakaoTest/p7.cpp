@@ -52,10 +52,10 @@ int calc(vector<vector<int>> board, int n) {
 			//위로 90도 좌우
 			//아래로 90도 좌우
 			int newmode = 1 - mode;
-			if (0 <= y - 1 && y - 1 < n && valid[y - 1][x][mode] == 1) {
+			if (0 <= y - 1 && valid[y - 1][x][mode] == 1) {
 				//위로 90도, 좌 축
 				newx = x; newy = y - 1;
-				if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
+				if (0 <= newy  && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
 					statss newstat;
 					newstat.mode = newmode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 					que.push(newstat);
@@ -63,7 +63,7 @@ int calc(vector<vector<int>> board, int n) {
 
 				//위로 90도, 우 축
 				newx = x + 1; newy = y - 1;
-				if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
+				if ( newx < n && 0 <= newy && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
 					statss newstat;
 					newstat.mode = newmode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 					que.push(newstat);
@@ -71,10 +71,10 @@ int calc(vector<vector<int>> board, int n) {
 
 			}
 
-			if (0 <= y + 1 && y + 1 < n && valid[y + 1][x][mode] == 1) {
+			if ( y + 1 < n && valid[y + 1][x][mode] == 1) {
 				//아래로 90도, 좌 축
 				newx = x; newy = y;
-				if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
+				if (visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
 					statss newstat;
 					newstat.mode = newmode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 					que.push(newstat);
@@ -82,7 +82,7 @@ int calc(vector<vector<int>> board, int n) {
 
 				//아래로 90도, 우 축
 				newx = x + 1; newy = y;
-				if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
+				if ( newx < n  && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
 					statss newstat;
 					newstat.mode = newmode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 					que.push(newstat);
@@ -96,11 +96,11 @@ int calc(vector<vector<int>> board, int n) {
 
 			int newmode = 1 - mode;
 
-			if (0 <= x - 1 && x - 1 < n && valid[y][x - 1][mode] == 1) {
+			if (0 <= x - 1  && valid[y][x - 1][mode] == 1) {
 
 				//좌로 90도, 상 축
 				newx = x - 1; newy = y;
-				if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
+				if (0 <= newx && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
 					statss newstat;
 					newstat.mode = newmode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 					que.push(newstat);
@@ -109,7 +109,7 @@ int calc(vector<vector<int>> board, int n) {
 
 				//좌로 90도, 하 축
 				newx = x - 1; newy = y + 1;
-				if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
+				if (0 <= newx && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
 					statss newstat;
 					newstat.mode = newmode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 					que.push(newstat);
@@ -117,18 +117,18 @@ int calc(vector<vector<int>> board, int n) {
 			}
 
 
-			if (0 <= x + 1 && x + 1 < n && valid[y][x + 1][mode] == 1) {
+			if ( x + 1 < n && valid[y][x + 1][mode] == 1) {
 
 				//우로 90도, 상 축
 				newx = x; newy = y;
-				if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
+				if (visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
 					statss newstat;
 					newstat.mode = newmode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 					que.push(newstat);
 				}
 				//우로 90도, 하 축
 				newx = x; newy = y + 1;
-				if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
+				if (newy < n && visit[newy][newx][newmode] == 0 && valid[newy][newx][newmode] == 1) {
 					statss newstat;
 					newstat.mode = newmode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 					que.push(newstat);
@@ -139,7 +139,7 @@ int calc(vector<vector<int>> board, int n) {
 
 		//위
 		newx = x; newy = y - 1;
-		if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][mode] == 0 && valid[newy][newx][mode] == 1) {
+		if ( 0 <= newy  && visit[newy][newx][mode] == 0 && valid[newy][newx][mode] == 1) {
 			statss newstat;
 			newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 			que.push(newstat);
@@ -147,7 +147,7 @@ int calc(vector<vector<int>> board, int n) {
 
 		//아래
 		newx = x; newy = y + 1;
-		if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][mode] == 0 && valid[newy][newx][mode] == 1) {
+		if ( newy < n && visit[newy][newx][mode] == 0 && valid[newy][newx][mode] == 1) {
 			statss newstat;
 			newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 			que.push(newstat);
@@ -155,7 +155,7 @@ int calc(vector<vector<int>> board, int n) {
 
 		//좌
 		newx = x - 1; newy = y;
-		if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][mode] == 0 && valid[newy][newx][mode] == 1) {
+		if (0 <= newx  &&  visit[newy][newx][mode] == 0 && valid[newy][newx][mode] == 1) {
 			statss newstat;
 			newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 			que.push(newstat);
@@ -163,7 +163,7 @@ int calc(vector<vector<int>> board, int n) {
 
 		//우
 		newx = x + 1; newy = y;
-		if (0 <= newx && newx < n && 0 <= newy && newy < n && visit[newy][newx][mode] == 0 && valid[newy][newx][mode] == 1) {
+		if ( newx < n && visit[newy][newx][mode] == 0 && valid[newy][newx][mode] == 1) {
 			statss newstat;
 			newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 			que.push(newstat);
