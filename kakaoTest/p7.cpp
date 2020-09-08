@@ -8,9 +8,8 @@ using namespace std;
 
 //int mode -> 0:가로, 1:세로
 
-int visit[101][101][2];
-
-int valid[101][101][2];
+int visit_width[101][101];
+int visit_height[101][101];
 
 struct __stat {
 	int time, mode, x, y;
@@ -24,10 +23,23 @@ bool checkpos(int x, int y, int mode, int n, vector<vector<int>> board) {
 		return false;
 	}
 
-	if (visit[y][x][mode] == 1)
-		return false;
-	if (valid[y][x][mode] == 0)
-		return false;
+	if (mode == 0) {//가로
+		if (visit_width[y][x] == 1)
+			return false;
+		if (board[y][x] == 1)
+			return false;
+		if (x == n - 1 || board[y][x + 1] == 1)
+			return false;
+	}
+
+	else if (mode == 1) {//세로
+		if (visit_height[y][x] == 1)
+			return false;
+		if (board[y][x] == 1)
+			return false;
+		if (y == n - 1 || board[y + 1][x] == 1)
+			return false;
+	}
 
 	return true;
 }
@@ -38,9 +50,19 @@ bool checkmove(int x, int y, int mode, int n, vector<vector<int>> board) {
 		return false;
 	}
 
-	if (valid[y][x][mode] == 0)
-		return false;
+	if (mode == 0) {//가로
+		if (board[y][x] == 1)
+			return false;
+		if (x == n - 1 || board[y][x + 1] == 1)
+			return false;
+	}
 
+	else if (mode == 1) {//세로
+		if (board[y][x] == 1)
+			return false;
+		if (y == n - 1 || board[y + 1][x] == 1)
+			return false;
+	}
 
 	return true;
 }
@@ -75,10 +97,45 @@ int calc(vector<vector<int>> board, int n) {
 			//위로 90도 좌우
 			//아래로 90도 좌우
 
+			//위
+			newx = x; newy = y - 1;
+			if (checkpos(newx, newy, mode, n, board)) {
+				visit_width[newy][newx] = 1;
+				statss newstat;
+				newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
+				que.push(newstat);
+			}
+
+			//아래
+			newx = x; newy = y + 1;
+			if (checkpos(newx, newy, mode, n, board)) {
+				visit_width[newy][newx] = 1;
+				statss newstat;
+				newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
+				que.push(newstat);
+			}
+
+			//좌
+			newx = x - 1; newy = y;
+			if (checkpos(newx, newy, mode, n, board)) {
+				visit_width[newy][newx] = 1;
+				statss newstat;
+				newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
+				que.push(newstat);
+			}
+			//우
+			newx = x + 1; newy = y;
+			if (checkpos(newx, newy, mode, n, board)) {
+				visit_width[newy][newx] = 1;
+				statss newstat;
+				newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
+				que.push(newstat);
+			}
+
 			//위로 90도, 좌 축
 			newx = x; newy = y - 1;
 			if (checkpos(newx, newy, 1, n, board) && checkmove(x, y - 1, mode, n, board)) {
-				visit[newy][newx][1] = 1;
+				visit_height[newy][newx] = 1;
 				statss newstat;
 				newstat.mode = 1; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 				que.push(newstat);
@@ -86,7 +143,7 @@ int calc(vector<vector<int>> board, int n) {
 			//위로 90도, 우 축
 			newx = x + 1; newy = y - 1;
 			if (checkpos(newx, newy, 1, n, board) && checkmove(x, y - 1, mode, n, board)) {
-				visit[newy][newx][1] = 1;
+				visit_height[newy][newx] = 1;
 				statss newstat;
 				newstat.mode = 1; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 				que.push(newstat);
@@ -94,7 +151,7 @@ int calc(vector<vector<int>> board, int n) {
 			//아래로 90도, 좌 축
 			newx = x; newy = y;
 			if (checkpos(newx, newy, 1, n, board) && checkmove(x, y + 1, mode, n, board)) {
-				visit[newy][newx][1] = 1;
+				visit_height[newy][newx] = 1;
 				statss newstat;
 				newstat.mode = 1; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 				que.push(newstat);
@@ -102,7 +159,7 @@ int calc(vector<vector<int>> board, int n) {
 			//아래로 90도, 우 축
 			newx = x + 1; newy = y;
 			if (checkpos(newx, newy, 1, n, board) && checkmove(x, y + 1, mode, n, board)) {
-				visit[newy][newx][1] = 1;
+				visit_height[newy][newx] = 1;
 				statss newstat;
 				newstat.mode = 1; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 				que.push(newstat);
@@ -110,11 +167,52 @@ int calc(vector<vector<int>> board, int n) {
 		}
 
 		else if (mode == 1) {//세로
+			visit_height[y][x] = 1;
+
+			//상하좌우
+			//위로 90도 좌우
+			//아래로 90도 좌우
+
+			//위
+			newx = x; newy = y - 1;
+			if (checkpos(newx, newy, mode, n, board)) {
+				visit_height[newy][newx] = 1;
+				statss newstat;
+				newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
+				que.push(newstat);
+			}
+
+			//아래
+			newx = x; newy = y + 1;
+			if (checkpos(newx, newy, mode, n, board)) {
+				visit_height[newy][newx] = 1;
+				statss newstat;
+				newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
+				que.push(newstat);
+			}
+
+			//좌
+			newx = x - 1; newy = y;
+			if (checkpos(newx, newy, mode, n, board)) {
+				visit_height[newy][newx] = 1;
+				statss newstat;
+				newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
+				que.push(newstat);
+			}
+
+			//우
+			newx = x + 1; newy = y;
+			if (checkpos(newx, newy, mode, n, board)) {
+				visit_height[newy][newx] = 1;
+				statss newstat;
+				newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
+				que.push(newstat);
+			}
 
 			//좌로 90도, 상 축
 			newx = x - 1; newy = y;
 			if (checkpos(newx, newy, 0, n, board) && checkmove(x - 1, y, mode, n, board)) {
-				visit[newy][newx][0] = 1;
+				visit_width[newy][newx] = 1;
 				statss newstat;
 				newstat.mode = 0; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 				que.push(newstat);
@@ -122,7 +220,7 @@ int calc(vector<vector<int>> board, int n) {
 			//우로 90도, 상 축
 			newx = x; newy = y;
 			if (checkpos(newx, newy, 0, n, board) && checkmove(x + 1, y, mode, n, board)) {
-				visit[newy][newx][0] = 1;
+				visit_width[newy][newx] = 1;
 				statss newstat;
 				newstat.mode = 0; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 				que.push(newstat);
@@ -130,7 +228,7 @@ int calc(vector<vector<int>> board, int n) {
 			//좌로 90도, 하 축
 			newx = x - 1; newy = y + 1;
 			if (checkpos(newx, newy, 0, n, board) && checkmove(x - 1, y, mode, n, board)) {
-				visit[newy][newx][0] = 1;
+				visit_width[newy][newx] = 1;
 				statss newstat;
 				newstat.mode = 0; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 				que.push(newstat);
@@ -138,48 +236,11 @@ int calc(vector<vector<int>> board, int n) {
 			//우로 90도, 하 축
 			newx = x; newy = y + 1;
 			if (checkpos(newx, newy, 0, n, board) && checkmove(x + 1, y, mode, n, board)) {
-				visit[newy][newx][0] = 1;
+				visit_width[newy][newx] = 1;
 				statss newstat;
 				newstat.mode = 0; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
 				que.push(newstat);
 			}
-		}
-
-
-		//위
-		newx = x; newy = y - 1;
-		if (checkpos(newx, newy, mode, n, board)) {
-			visit[newy][newx][mode] = 1;
-			statss newstat;
-			newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
-			que.push(newstat);
-		}
-
-		//아래
-		newx = x; newy = y + 1;
-		if (checkpos(newx, newy, mode, n, board)) {
-			visit[newy][newx][mode] = 1;
-			statss newstat;
-			newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
-			que.push(newstat);
-		}
-
-		//좌
-		newx = x - 1; newy = y;
-		if (checkpos(newx, newy, mode, n, board)) {
-			visit[newy][newx][mode] = 1;
-			statss newstat;
-			newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
-			que.push(newstat);
-		}
-
-		//우
-		newx = x + 1; newy = y;
-		if (checkpos(newx, newy, mode, n, board)) {
-			visit[newy][newx][mode] = 1;
-			statss newstat;
-			newstat.mode = mode; newstat.time = time + 1; newstat.x = newx; newstat.y = newy;
-			que.push(newstat);
 		}
 
 
@@ -192,39 +253,32 @@ int solution(vector<vector<int>> board) {
 
 	int n = board.size();
 
+	vector<vector<int>> board_big;
+	for (int i = 0; i < n + 1; i++) {
+
+		vector<int > board1;
+		board1.resize(n + 1);
+		board_big.push_back(board1);
+	}
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			board_big[i][j] = board[i][j];
+		}
+	}
+	for (int i = n; i <= n; i++) {
+		for (int j = n; j <= n; j++) {
+			board_big[i][j] = 1;
+		}
+	}
 
 	for (int i = 0; i <= n; i++) {
 		for (int j = 0; j <= n; j++) {
-			visit[i][j][0] = 0;
-			visit[i][j][1] = 0;
+			visit_width[i][j] = 0;
+			visit_height[i][j] = 0;
 		}
 	}
 
-
-	for (int i = 0; i < n - 1; i++) {
-		for (int j = 0; j < n; j++) {
-			if (board[i][j] == 0 && board[i + 1][j] == 0) {
-				valid[i][j][1] = 1;
-			}
-			else
-				valid[i][j][1] = 0;
-
-		}
-	}
-
-
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n - 1; j++) {
-			if (board[i][j] == 0 && board[i][j + 1] == 0) {
-				valid[i][j][0] = 1;
-			}
-			else
-				valid[i][j][0] = 0;
-
-		}
-	}
-
-	return calc(board, n);
+	return calc(board_big, n);
 }
 
 int main() {
@@ -233,30 +287,18 @@ int main() {
 	//int in[] = {0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0};
 	//int n=5;
 
-	//int in[] = { 0, 0, 0, 0, 0, 0, 1 , 1, 1, 1, 1, 0, 0, 1 , 0, 0, 0, 0, 0, 0, 0 , 0, 0, 1, 1, 1, 1, 0 , 0, 1, 1, 1, 1, 1, 0 , 0, 0, 0, 0, 0, 1, 1 , 0, 0, 1, 0, 0, 0, 0 };
-	//int in[] = { 0, 0, 0, 0, 0, 0, 1 , 1, 1, 1, 1, 0, 0, 1 , 0, 0, 0, 0, 0, 0, 0 , 0, 0, 1, 1, 1, 0, 0 , 0, 1, 1, 1, 1, 1, 0 , 0, 0, 0, 0, 0, 1, 0 , 0, 0, 1, 0, 0, 0, 0 };
-
-	int in[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 , 1, 1, 1, 1, 1, 1, 1, 0, 0 , 1, 1, 1, 1, 1, 1, 1, 1, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0 , 0, 0, 1, 1, 1, 1, 1, 0, 0 , 0, 1, 1, 1, 1, 1, 1, 1, 1 , 0, 0, 1, 1, 1, 1, 1, 0, 0 , 0, 0, 0, 0, 0, 0, 0, 0, 0 , 1, 1, 1, 1, 1, 1, 1, 1, 0 };
-	int n = 9;
+	//int in[] = { 0, 0, 0, 0, 0, 0, 1,1, 1, 1, 1, 0, 0, 1,0, 0, 0, 0, 0, 0, 0,0, 0, 1, 1, 1, 1, 0,0, 1, 1, 1, 1, 1, 0,0, 0, 0, 0, 0, 1, 1,0, 0, 1, 0, 0, 0, 0 };
+	int in[] = { 0, 0, 0, 0, 0, 0, 1 , 1, 1, 1, 1, 0, 0, 1 , 0, 0, 0, 0, 0, 0, 0 , 0, 0, 1, 1, 1, 0, 0 , 0, 1, 1, 1, 1, 1, 0 , 0, 0, 0, 0, 0, 1, 0 , 0, 0, 1, 0, 0, 0, 0 };
+	int n = 7;
 	for (int i = 0; i < n; i++) {
 
 		vector<int > board1;
-		for (int j = 0; j < n; j++) {
-			board1.push_back(in[i * n + j]);
-		}
+		board1.resize(n);
 		board.push_back(board1);
+		for (int j = 0; j < n; j++) {
+			board1.push_back(in[i*n + j]);
+		}
 	}
-
-
-	//int n = 100;
-	//for (int i = 0; i < n; i++) {
-
-	//	vector<int > board1;
-	//	for (int j = 0; j < n; j++) {
-	//		board1.push_back(0);
-	//	}
-	//	board.push_back(board1);
-	//}
 
 	int res = solution(board);
 
